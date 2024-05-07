@@ -8,8 +8,15 @@ const apiHeaders = {
   Accept: "application/json",
   "Content-Type": "application/json",
 };
+interface Note {
+  id: number;
+  title: string;
+}
+
+const notes: Note[] = [];
+
 export default function NotesPage() {
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState<Note[]>([] as Note[]);
   const getNotes = async () => {
     const fetchingNotes = await fetch("/api/notes", {
       method: "GET",
