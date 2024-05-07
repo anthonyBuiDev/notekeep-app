@@ -1,34 +1,20 @@
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
-import { cookies } from "next/headers";
+'use server';
 
-export const createClient = (cookieStore: ReturnType<typeof cookies>) => {
-  return createServerClient(
+import { createClient } from '@supabase/supabase-js';
+import { auth } from '@clerk/nextjs/server';
+import { Database } from '../types/database.types';
+
+async function getSupabaseServer() {
+  const { userId, getToken } = auth();
+  if (!userId) throw new Error('User not authenticated');
+
+  const accessToken = await getToken({ template: 'supabase' });
+
+  return createClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-        set(name: string, value: string, options: CookieOptions) {
-          try {
-            cookieStore.set({ name, value, ...options });
-          } catch (error) {
-            // The `set` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
-          }
-        },
-        remove(name: string, options: CookieOptions) {
-          try {
-            cookieStore.set({ name, value: "", ...options });
-          } catch (error) {
-            // The `delete` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
-          }
-        },
-      },
-    },
+    { global: { headers: { Authorization: `Bearer ${accessToken}` } } },
   );
-};
+}
+
+export default getSupabaseServer;
