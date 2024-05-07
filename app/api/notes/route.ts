@@ -13,7 +13,7 @@ export async function GET(){
       .from("notes")
       .select('*')
       .order('id', { ascending: false })
-      .eq('user_id', userId);;
+      .eq('user_id', userId as string);;
       handleErrorResponse(error);
       return NextResponse.json(data, { status: 201 });
 
@@ -58,7 +58,7 @@ export async function PUT(request: Request) {
       const { data, error } = await supabase
           .from('notes')
           .update(updatedData)
-          .eq('id', id)
+          .eq('id', id ? Number(id) : 0 )
           .select();
 
       handleErrorResponse(error);
@@ -81,7 +81,7 @@ export async function DELETE(request: Request) {
       const { data, error } = await supabase
           .from('notes')
           .delete()
-          .eq('id', id)
+          .eq('id', id ? Number(id) : 0)
           .select();
 
       handleErrorResponse(error);
