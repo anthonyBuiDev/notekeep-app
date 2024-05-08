@@ -1,4 +1,3 @@
-import NoteForm from "@/components/note-form";
 import { NoteList } from "@/components/notes/note-list";
 import getSupabaseServer from "@/utils/supabase/server";
 

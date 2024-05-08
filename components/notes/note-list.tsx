@@ -1,4 +1,3 @@
-import { todo } from "node:test";
 import NoteForm from "./note-form";
 import { NoteItem } from "./note-item";
 import { Note } from "@/utils/types/customs";
