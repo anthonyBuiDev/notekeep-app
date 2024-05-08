@@ -13,7 +13,7 @@ export type Database = {
       notes: {
         Row: {
           created_at: string | null
-          desc: string | null
+          content: string | null
           id: number
           title: string | null
           updated_ad: string | null
@@ -21,7 +21,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
-          desc?: string | null
+          content?: string | null
           id?: number
           title?: string | null
           updated_ad?: string | null
@@ -29,7 +29,7 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
-          desc?: string | null
+          content?: string | null
           id?: number
           title?: string | null
           updated_ad?: string | null

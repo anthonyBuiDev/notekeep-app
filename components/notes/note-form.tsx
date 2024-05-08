@@ -1,10 +1,9 @@
 "use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
+
 import {
   Form,
   FormControl,
@@ -14,55 +13,41 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
 import { Input } from "@/components/ui/input";
-import { Textarea } from "./ui/textarea";
-import { useAuth } from "@clerk/nextjs";
+import { Textarea } from "../ui/textarea";
+
+import { createNote } from "@/app/(root)/notes/actions";
+import { useRef } from "react";
 
 const formSchema = z.object({
   title: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
-  desc: z.string(),
+  content: z.string(),
 });
 
-const apiHeaders = {
-  Accept: "application/json",
-  "Content-Type": "application/json",
-};
-
 export default function NoteForm() {
-  const { userId } = useAuth();
+  const formRef = useRef<HTMLFormElement>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
-      desc: "",
+      content: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    const currentTime = new Date().getTime();
-
-    const createdNote = await fetch("/api/notes", {
-      method: "POST",
-      headers: apiHeaders,
-      body: JSON.stringify({
-        insertData: {
-          title: values.title,
-          desc: values.desc,
-          user_id: userId,
-        },
-      }),
-    });
-
-    if (createdNote.ok) {
-      console.log("up ok");
-    }
-  }
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+      <form
+        className="space-y-2"
+        action={async (data) => {
+          await createNote(data);
+          formRef?.current?.reset();
+        }}
+        ref={formRef}
+      >
         <FormField
           control={form.control}
           name="title"
@@ -77,11 +62,11 @@ export default function NoteForm() {
         />
         <FormField
           control={form.control}
-          name="desc"
+          name="content"
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Textarea placeholder="desc" {...field} />
+                <Textarea placeholder="content" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

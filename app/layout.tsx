@@ -1,5 +1,4 @@
 import { ClerkProvider, SignedIn, UserButton } from "@clerk/nextjs";
-import { ReactQueryClientProvider } from "@/components/ReactQueryClientProvider";
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -20,29 +19,27 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <ReactQueryClientProvider>
-        <html lang="en">
-          <body className={inter.className}>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <header className="flex items-center justify-between p-3 shadow-md">
-                <div className="text-[2rem]">NoteKeep</div>
-                <div className="flex gap-8">
-                  <ModeToggle />
-                  <SignedIn>
-                    <UserButton />
-                  </SignedIn>
-                </div>
-              </header>
-              {children}
-            </ThemeProvider>
-          </body>
-        </html>
-      </ReactQueryClientProvider>
+      <html lang="en">
+        <body className={inter.className}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <header className="flex items-center justify-between p-3 shadow-md">
+              <div className="text-[2rem]">NoteKeep</div>
+              <div className="flex gap-8">
+                <ModeToggle />
+                <SignedIn>
+                  <UserButton />
+                </SignedIn>
+              </div>
+            </header>
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
     </ClerkProvider>
   );
 }
