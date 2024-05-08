@@ -1,10 +1,11 @@
 import { ClerkProvider, SignedIn, UserButton } from "@clerk/nextjs";
-
+import { auth } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "@/components/ModeToggle";
+import Header from "@/components/header";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -17,6 +18,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  auth().protect();
   return (
     <ClerkProvider>
       <html lang="en">
@@ -27,15 +29,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <header className="flex items-center justify-between p-3 shadow-md">
-              <div className="text-[2rem]">NoteKeep</div>
-              <div className="flex gap-8">
-                <ModeToggle />
-                <SignedIn>
-                  <UserButton />
-                </SignedIn>
-              </div>
-            </header>
+            <Header />
             {children}
           </ThemeProvider>
         </body>
