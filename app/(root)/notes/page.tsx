@@ -1,21 +1,24 @@
 import { NoteList } from "@/components/notes/note-list";
+import { getNotes } from "@/lib/actions";
 import getSupabaseServer from "@/utils/supabase/server";
-
-interface Note {
-  id: number;
-  title: string;
-}
-
-const notes: Note[] = [];
-
+import { Note } from "@/utils/types/customs";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 export default async function NotesPage() {
-  const supabase = await getSupabaseServer();
-
-  const { data: notes } = await supabase.from("notes").select("*");
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: ["notes"],
+    queryFn: getNotes,
+  });
 
   return (
-    <div>
-      <NoteList notes={notes ?? []} />
-    </div>
+    <main>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <NoteList />
+      </HydrationBoundary>
+    </main>
   );
 }

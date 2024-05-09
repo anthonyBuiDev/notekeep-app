@@ -7,29 +7,26 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
 
-import { createNote } from "@/app/(root)/notes/actions";
+import { createNote } from "@/lib/actions";
 import { useRef } from "react";
+import { useCreateNote } from "@/hooks/useCreateNote";
 
 const formSchema = z.object({
-  title: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
+  title: z.string(),
   content: z.string(),
 });
 
 export default function NoteForm() {
-  const formRef = useRef<HTMLFormElement>(null);
-
+  // const formRef = useRef<HTMLFormElement>(null);
+  const { isCreating, createNote } = useCreateNote();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,23 +35,27 @@ export default function NoteForm() {
     },
   });
 
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    createNote(
+      { ...values },
+      {
+        onSuccess: (data) => {
+          form.reset();
+        },
+      },
+    );
+    console.log(values);
+  }
   return (
     <Form {...form}>
-      <form
-        className="space-y-2"
-        action={async (data) => {
-          await createNote(data);
-          formRef?.current?.reset();
-        }}
-        ref={formRef}
-      >
+      <form className="space-y-2" onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="title"
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Title" {...field} />
+                <Input placeholder="Title" {...field} required />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -66,13 +67,15 @@ export default function NoteForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Textarea placeholder="content" {...field} />
+                <Textarea placeholder="content" {...field} required />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={isCreating}>
+          Submit
+        </Button>
       </form>
     </Form>
   );
