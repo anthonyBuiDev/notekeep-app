@@ -1,8 +1,10 @@
-"use client";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Textarea } from "../ui/textarea";
+import { useEditNote } from "@/hooks/useEditNote";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
 
 import {
   Form,
@@ -11,21 +13,15 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-
-import { Input } from "@/components/ui/input";
-import { Textarea } from "../ui/textarea";
-
-import { useCreateNote } from "@/hooks/useCreateNote";
 import { Note } from "@/utils/types/customs";
-
 const formSchema = z.object({
   title: z.string(),
   content: z.string(),
 });
 
-export default function NoteForm() {
-  // const formRef = useRef<HTMLFormElement>(null);
-  const { isCreating, createNote } = useCreateNote();
+export function NoteEditForm({ note }: { note: Note }) {
+  const { editNote, isEditing } = useEditNote();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,15 +31,19 @@ export default function NoteForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    createNote(
-      { ...values },
+    const data = {
+      title: values.title,
+      content: values.content,
+    };
+
+    editNote(
+      { newNoteData: { ...data }, id: note.id },
       {
         onSuccess: (data) => {
           form.reset();
         },
       },
     );
-    console.log(values);
   }
   return (
     <Form {...form}>
@@ -58,7 +58,7 @@ export default function NoteForm() {
                   placeholder="Title"
                   {...field}
                   required
-                  disabled={isCreating}
+                  disabled={isEditing}
                 />
               </FormControl>
               <FormMessage />
@@ -75,16 +75,21 @@ export default function NoteForm() {
                   placeholder="content"
                   {...field}
                   required
-                  disabled={isCreating}
+                  disabled={isEditing}
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isCreating}>
-          Submit
-        </Button>
+
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button type="submit" disabled={isEditing}>
+              Save changes
+            </Button>
+          </DialogClose>
+        </DialogFooter>
       </form>
     </Form>
   );

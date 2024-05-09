@@ -48,6 +48,21 @@ export async function createNote(newNote : newNote){
   return data;
 }
 
+export async function editNote(newNote : newNote,id:number){
+  const supabase = await getSupabaseServer();
+  const  { userId } = auth();
+
+  if(!userId){
+    return new Response("User is not logged in", { status: 401 });
+  }
+
+  const { data, error } = await supabase.from("notes").update({ ...newNote}).eq("id", id);
+      
+  if(error) throw new Error("Error create Note");
+  
+  return data;
+}
+
 export async function deleteNote(id:number){
   const supabase = await getSupabaseServer();
   const  { userId } = auth();
