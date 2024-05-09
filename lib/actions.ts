@@ -20,7 +20,12 @@ export async function getNotes(){
   return data;
 }
 
-export async function createNote(newNote : Note){
+type newNote = {
+  title: string | null;
+  content: string | null;
+}
+
+export async function createNote(newNote : newNote){
   const supabase = await getSupabaseServer();
   const  { userId } = auth();
 
@@ -51,12 +56,13 @@ export async function deleteNote(id:number){
     return new Response("User is not logged in", { status: 401 });
   }
 
-  const { error } = await supabase
+  const {data, error } = await supabase
   .from('notes')
   .delete()
   .match({ user_id:userId,id:id })
 
   if(error) throw new Error("Error delete Note");
   
-  revalidatePath("/notes");
+  // revalidatePath("/notes");
+  return data;
 }

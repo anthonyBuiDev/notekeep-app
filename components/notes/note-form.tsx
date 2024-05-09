@@ -18,6 +18,7 @@ import { Textarea } from "../ui/textarea";
 import { createNote } from "@/lib/actions";
 import { useRef } from "react";
 import { useCreateNote } from "@/hooks/useCreateNote";
+import { Note } from "@/utils/types/customs";
 
 const formSchema = z.object({
   title: z.string(),
@@ -55,7 +56,12 @@ export default function NoteForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Title" {...field} required />
+                <Input
+                  placeholder="Title"
+                  {...field}
+                  required
+                  disabled={isCreating}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -67,7 +73,12 @@ export default function NoteForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Textarea placeholder="content" {...field} required />
+                <Textarea
+                  placeholder="content"
+                  {...field}
+                  required
+                  disabled={isCreating}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

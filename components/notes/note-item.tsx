@@ -10,14 +10,13 @@ import {
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { TrashIcon } from "lucide-react";
-import { deleteNote } from "@/lib/actions";
 import { Note } from "@/utils/types/customs";
-import { useFormStatus } from "react-dom";
+import { useDeleteNote } from "@/hooks/useDeleteNote";
 
 export function NoteItem({ note }: { note: Note }) {
-  const { pending } = useFormStatus();
-  const handleDelete = async () => {
-    await deleteNote(note.id);
+  const { isDeleting, deleteNote } = useDeleteNote();
+  const handleDelete = () => {
+    deleteNote(note.id);
   };
   return (
     <li key={note.id} className="list-none">
@@ -38,7 +37,7 @@ export function NoteItem({ note }: { note: Note }) {
                 }}
               > */}
               <input type="hidden" name="id" value={note.id} />
-              <Button disabled={pending} size="sm" onClick={handleDelete}>
+              <Button disabled={isDeleting} size="sm" onClick={handleDelete}>
                 <TrashIcon />
               </Button>
               {/* </form> */}

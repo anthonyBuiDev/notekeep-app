@@ -1,20 +1,12 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
+
 import NoteForm from "./note-form";
 import { NoteItem } from "./note-item";
-
-import { getNotes } from "@/lib/actions";
 import { Note } from "@/utils/types/customs";
-
-function useGetNotes() {
-  return useQuery({
-    queryFn: async () => getNotes(),
-    queryKey: ["notes"],
-  });
-}
+import { useNotes } from "@/hooks/useNotes";
 
 export function NoteList() {
-  const { data: notes, isLoading } = useGetNotes();
+  const { data: notes, isLoading } = useNotes();
 
   if (isLoading) {
     return <div>Loading...</div>;
