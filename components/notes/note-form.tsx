@@ -47,19 +47,19 @@ export default function NoteForm({ noteToEdit }: { noteToEdit?: Note }) {
       ? {
           title: "",
           content: "",
-          image: "",
+          image: undefined,
         }
       : {
           title: title || "",
           content: content || "",
-          image: image || "",
+          image: undefined,
         },
   });
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     const image = typeof data.image === "string" ? data.image : data.image[0];
 
-    if (isEditSession)
+    if (isEditSession && editId !== undefined)
       editNote(
         { newNote: { ...data, image }, id: editId },
         {

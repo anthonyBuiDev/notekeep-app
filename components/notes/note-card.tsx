@@ -21,9 +21,10 @@ export default function NoteCard({ note }: { note: Note }) {
           <Image
             src="https://kcncpiekjfsmkwylphkn.supabase.co/storage/v1/object/public/note-images/kristaps-ungurs-uO7d-soLO2A-unsplash.jpg"
             width="300"
-            height="150"
+            height="100"
             alt={`image ${note.image}`}
-            priority={false}
+            priority={true}
+            className="h-auto w-auto"
           />
         ) : (
           ""
