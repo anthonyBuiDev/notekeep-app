@@ -7,9 +7,10 @@ import { editNote as editNoteApi } from "@/lib/actions";
 
 
 
-type newNoteData = {
+type newNote = {
   title: string | null;
   content: string | null;
+  image:string | null;
 }
 
 export function useEditNote() {
@@ -17,8 +18,7 @@ export function useEditNote() {
 
   const { mutate: editNote, isPending: isEditing } =
     useMutation({
-      mutationFn: ({ newNoteData, id }:{ newNoteData: newNoteData, id: number } ) =>
-        editNoteApi(newNoteData, id),
+      mutationFn: ({ newNote, id }:{ newNote: newNote, id: number } ) => editNoteApi(newNote, id),
       onSuccess: () => {
         toast.success("Note successfully edited");
         queryClient.invalidateQueries({

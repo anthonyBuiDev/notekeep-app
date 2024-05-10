@@ -12,25 +12,31 @@ export type Database = {
     Tables: {
       notes: {
         Row: {
-          created_at: string | null
           content: string | null
+          created_at: string | null
           id: number
+          image: string | null
+          isShouldDelete: boolean | null
           title: string | null
           updated_ad: string | null
           user_id: string | null
         }
         Insert: {
-          created_at?: string | null
           content?: string | null
+          created_at?: string | null
           id?: number
+          image?: string | null
+          isShouldDelete?: boolean | null
           title?: string | null
           updated_ad?: string | null
           user_id?: string | null
         }
         Update: {
-          created_at?: string | null
           content?: string | null
+          created_at?: string | null
           id?: number
+          image?: string | null
+          isShouldDelete?: boolean | null
           title?: string | null
           updated_ad?: string | null
           user_id?: string | null
