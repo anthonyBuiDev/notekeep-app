@@ -1,9 +1,9 @@
 import { ClerkProvider, SignedIn, UserButton } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
+
 import Header from "@/components/header";
 import Providers from "../utils/query/providers";
 import { Toaster } from "react-hot-toast";
@@ -19,42 +19,34 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  auth().protect();
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" className="overflow-y-hidden ">
         <body className={inter.className}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Providers>
-              <Header />
-              {children}
-            </Providers>
-            <Toaster
-              position="top-center"
-              gutter={12}
-              containerStyle={{ margin: "8px" }}
-              toastOptions={{
-                success: {
-                  duration: 3000,
-                },
-                error: {
-                  duration: 5000,
-                },
-                style: {
-                  fontSize: "16px",
-                  maxWidth: "500px",
-                  padding: "16px 24px",
-                  backgroundColor: "var(--color-grey-0)",
-                  color: "var(--color-grey-700)",
-                },
-              }}
-            />
-          </ThemeProvider>
+          <Providers>
+            <Header />
+            {children}
+          </Providers>
+          <Toaster
+            position="top-center"
+            gutter={12}
+            containerStyle={{ margin: "8px" }}
+            toastOptions={{
+              success: {
+                duration: 3000,
+              },
+              error: {
+                duration: 5000,
+              },
+              style: {
+                fontSize: "16px",
+                maxWidth: "500px",
+                padding: "16px 24px",
+                backgroundColor: "var(--color-grey-0)",
+                color: "var(--color-grey-700)",
+              },
+            }}
+          />
         </body>
       </html>
     </ClerkProvider>
