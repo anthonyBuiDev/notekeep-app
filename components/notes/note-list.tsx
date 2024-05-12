@@ -8,10 +8,6 @@ import { useNotes } from "@/hooks/useNotes";
 export function NoteList() {
   const { data: notes, isLoading } = useNotes();
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   const notesArray = Array.isArray(notes) ? notes : [];
 
   return (

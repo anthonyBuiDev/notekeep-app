@@ -1,11 +1,6 @@
 "use client";
 import clsx from "clsx";
-import {
-  NotebookIcon,
-  NotebookPenIcon,
-  TagsIcon,
-  TrashIcon,
-} from "lucide-react";
+import { NotebookPenIcon, TagsIcon, TrashIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
