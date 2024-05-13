@@ -37,7 +37,7 @@ export default function NoteCard({ note }: { note: Note }) {
       </CardContent>
       <CardFooter>
         <span className="flex items-center justify-center gap-3">
-          <p>Edited at {formatDate(note.updated_ad)}</p>
+          <p>Edited at {formatDate(note.updated_ad ?? "")}</p>
           <Button
             disabled={isDeleting}
             size="sm"
