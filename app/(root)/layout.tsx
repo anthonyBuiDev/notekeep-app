@@ -42,8 +42,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <CommandGroup>
               {links.map((link) => {
                 return (
-                  <Link href={link.href}>
-                    <CommandItem key={link.name} className="flex gap-4">
+                  <Link href={link.href} key={link.name}>
+                    <CommandItem className="flex gap-4">
                       {link.icon}
                       <span className="font-semibold">{link.name}</span>
                     </CommandItem>
