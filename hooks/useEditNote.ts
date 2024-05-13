@@ -10,7 +10,6 @@ import { editNote as editNoteApi } from "@/lib/actions";
 type newNote = {
   title: string | null;
   content: string | null;
-  image:string | null;
 }
 
 export function useEditNote() {

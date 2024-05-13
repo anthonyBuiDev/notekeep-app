@@ -3,6 +3,24 @@ import clsx from "clsx";
 import { NotebookPenIcon, TagsIcon, TrashIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "@/components/ui/command";
+import {
+  Calculator,
+  Calendar,
+  CreditCard,
+  Settings,
+  Smile,
+  User,
+} from "lucide-react";
 
 const links = [
   {
@@ -19,28 +37,24 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
       <div className="mt-6 w-full flex-none md:w-64">
-        <div>
-          <ul className="flex flex-col justify-between gap-3">
-            {links.map((link) => {
-              return (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className={clsx(
-                    `flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-slate-300 hover:text-slate-600 md:flex-none md:justify-start md:p-2 md:px-3`,
-                    {
-                      "text-blue-1000 bg-slate-400": pathname === link.href,
-                    },
-                  )}
-                >
-                  <div className="w-6">{link.icon}</div>
-                  <p className="hidden md:block">{link.name}</p>
-                </Link>
-              );
-            })}
-          </ul>
-        </div>
+        <Command className="rounded-lg border shadow-md">
+          <CommandList>
+            <CommandGroup>
+              {links.map((link) => {
+                return (
+                  <Link href={link.href}>
+                    <CommandItem key={link.name} className="flex gap-4">
+                      {link.icon}
+                      <span className="font-semibold">{link.name}</span>
+                    </CommandItem>
+                  </Link>
+                );
+              })}
+            </CommandGroup>
+          </CommandList>
+        </Command>
       </div>
+
       <div className="w-full p-6 md:overflow-y-auto md:px-6 md:py-12">
         {children}
       </div>

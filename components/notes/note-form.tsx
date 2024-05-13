@@ -31,14 +31,13 @@ import { Note } from "@/utils/types/customs";
 const formSchema = z.object({
   title: z.string(),
   content: z.string(),
-  image: z.string(),
 });
 
 export default function NoteForm({ noteToEdit }: { noteToEdit?: Note }) {
   const { isCreating, createNote } = useCreateNote();
   const { editNote, isEditing } = useEditNote();
 
-  const { id: editId, title, content, image } = noteToEdit || {};
+  const { id: editId, title, content } = noteToEdit || {};
 
   const isEditSession = Boolean(editId);
   const form = useForm<z.infer<typeof formSchema>>({
@@ -47,21 +46,17 @@ export default function NoteForm({ noteToEdit }: { noteToEdit?: Note }) {
       ? {
           title: "",
           content: "",
-          image: undefined,
         }
       : {
           title: title || "",
           content: content || "",
-          image: undefined,
         },
   });
 
   function onSubmit(data: z.infer<typeof formSchema>) {
-    const image = typeof data.image === "string" ? data.image : data.image[0];
-
     if (isEditSession && editId !== undefined)
       editNote(
-        { newNote: { ...data, image }, id: editId },
+        { newNote: { ...data }, id: editId },
         {
           onSuccess: (data) => {
             form.reset();
@@ -70,7 +65,7 @@ export default function NoteForm({ noteToEdit }: { noteToEdit?: Note }) {
       );
     else
       createNote(
-        { ...data, image: image },
+        { ...data },
         {
           onSuccess: (data) => {
             form.reset();
@@ -82,11 +77,20 @@ export default function NoteForm({ noteToEdit }: { noteToEdit?: Note }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>{isEditSession ? <EditIcon /> : "Create new Note"}</Button>
+        {isEditSession ? (
+          <Button variant="ghost" className="w-full">
+            Edit
+          </Button>
+        ) : (
+          <Button>Create new Note</Button>
+        )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className=" sm:max-w-[425px]">
         <Form {...form}>
-          <form className="space-y-2" onSubmit={form.handleSubmit(onSubmit)}>
+          <form
+            className="m-2 space-y-2"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
             <FormField
               control={form.control}
               name="title"
@@ -116,18 +120,7 @@ export default function NoteForm({ noteToEdit }: { noteToEdit?: Note }) {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input placeholder="image" {...field} type="file" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+
             <DialogFooter>
               <DialogClose asChild>
                 <Button type="submit">

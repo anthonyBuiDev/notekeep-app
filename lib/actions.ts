@@ -23,7 +23,7 @@ export async function getNotes(){
 type newNote = {
   title: string | null;
   content: string | null;
-  image:string | null;
+
 }
 
 export async function createNote(newNote : newNote){
@@ -34,22 +34,14 @@ export async function createNote(newNote : newNote){
     return new Response("User is not logged in", { status: 401 });
   }
 
-  const supabaseUrl = "https://kcncpiekjfsmkwylphkn.supabase.co";
-  const patchImage = newNote.image;
-  const nameImage = patchImage?.split("\\").pop();
 
-  // const hasImagePath = newNote.image?.startsWith?.(supabaseUrl);
 
-  const imageName = `${Math.random()}-${
-    nameImage
-  }`.replaceAll("/", "");
 
-  const imagePath = `${supabaseUrl}/storage/v1/object/public/note-images/${imageName}`;
+
 
 
   const { data, error } = await supabase.from("notes").insert({
     ...newNote,
-    image: imagePath,
     user_id: userId,
   });
   console.log(data);
@@ -84,18 +76,8 @@ export async function editNote(newNote : newNote,id:number){
   if(!userId){
     return new Response("User is not logged in", { status: 401 });
   }
-  const supabaseUrl = "https://kcncpiekjfsmkwylphkn.supabase.co";
-  const patchImage = newNote.image;
-  const nameImage = patchImage?.split("\\").pop();
 
-  const imageName = `${Math.random()}-${
-    nameImage
-  }`.replaceAll("/", "");
-
-  const imagePath = `${supabaseUrl}/storage/v1/object/public/note-images/${imageName}`;
-
-
-  const { data, error } = await supabase.from("notes").update({ ...newNote,image: imagePath}).eq("id", id);
+  const { data, error } = await supabase.from("notes").update({ ...newNote}).eq("id", id);
       
   if(error) throw new Error("Error edit Note");
   
