@@ -55,9 +55,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </Command>
       </div>
 
-      <div className="w-full p-6 md:overflow-y-auto md:px-6 md:py-12">
-        {children}
-      </div>
+      <div className="w-full p-6 md:overflow-y-auto md:p-7">{children}</div>
     </div>
   );
 }
