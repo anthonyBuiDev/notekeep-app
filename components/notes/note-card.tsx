@@ -11,6 +11,7 @@ import { useDeleteNote } from "@/hooks/useDeleteNote";
 import { Note } from "@/utils/types/customs";
 import Image from "next/image";
 import NoteForm from "./note-form";
+import { formatDate } from "@/lib/helpers";
 export default function NoteCard({ note }: { note: Note }) {
   const { isDeleting, deleteNote } = useDeleteNote();
 
@@ -20,11 +21,11 @@ export default function NoteCard({ note }: { note: Note }) {
         {note.image ? (
           <Image
             src="https://kcncpiekjfsmkwylphkn.supabase.co/storage/v1/object/public/note-images/kristaps-ungurs-uO7d-soLO2A-unsplash.jpg"
-            width="300"
+            width="100"
             height="100"
             alt={`image ${note.image}`}
             priority={true}
-            className="h-auto w-auto"
+            className="h-80 w-80 object-cover"
           />
         ) : (
           ""
@@ -36,7 +37,7 @@ export default function NoteCard({ note }: { note: Note }) {
       </CardContent>
       <CardFooter>
         <span className="flex items-center justify-center gap-3">
-          <p>Edited at:{note.updated_ad}</p>
+          <p>Edited at {formatDate(note.updated_ad)}</p>
           <Button
             disabled={isDeleting}
             size="sm"
