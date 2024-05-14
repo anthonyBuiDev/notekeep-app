@@ -1,9 +1,7 @@
 "use server"
 import getSupabaseServer from "@/utils/supabase/server";
-import { Note } from "@/utils/types/customs";
-import { Database } from "@/utils/types/database.types";
 import { auth } from "@clerk/nextjs/server";
-import { revalidatePath } from "next/cache";
+
 
 export async function getNotes(){
   const supabase = await getSupabaseServer();
